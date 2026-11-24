@@ -1,0 +1,13 @@
+[Unit]
+Description=Stimmungsbarometer Buzzer (GPIO -> Tasten 1/2/3, LED-Rückmeldung)
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/stimmungsbarometer/buzzer.py
+Restart=always
+RestartSec=3
+User=root
+
+[Install]
+WantedBy=multi-user.target
