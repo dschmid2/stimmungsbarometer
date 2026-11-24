@@ -30,6 +30,8 @@ supabase/tests/        Ablauf-Test (lokal gegen Postgres)
 src/                   Webanwendung
 raspi/                 Buzzer-Dienst und Kiosk-Einrichtung für den Raspberry Pi
 hardware/              3D-Druckdateien für das Buzzer-Pult (OpenSCAD + STL)
+docs/                  Konzept, Bauanleitung, Bilder, alter Prototyp
+CLAUDE.md              Hinweise für die Weiterentwicklung mit Claude Code
 ```
 
 ## Entwicklung
@@ -66,4 +68,12 @@ Hinweis: Die E-Mail-Vorlage für den Anmeldelink ist im Supabase-Projekt gemeins
 
 Ein Benutzerkonto auf dem Terminal ist nicht nötig. Entkoppeln geht jederzeit in der App; das Gerät zeigt dann wieder einen Code. Versteckt am Terminal: linke obere Ecke 3 Sekunden halten öffnet ein Menü (Vollbild, Ton, Entkoppeln).
 
-Bauanleitung für das Buzzer-Pult (Gehäuse, Verdrahtung, LEDs): siehe `hardware/` und die separate Bauanleitung.
+## Unterlagen
+
+- [Bauanleitung Buzzer-Pult](docs/bauanleitung.md): Stückliste, 3D-Druck, Verdrahtung (5 V und 12 V), Zusammenbau, Raspi-Software, Fehlersuche
+- [Konzept und Entscheidungen](docs/konzept.md): Idee, Change-Management-Grundsätze, Entscheidungsprotokoll, offene Punkte
+- [Hardware-Dateien](hardware/README.md): STL, OpenSCAD-Parameter, neu exportieren
+
+![Terminal](docs/bilder/app_terminal.png)
+
+![Auswertung (Beispieldaten)](docs/bilder/app_auswertung.png)
