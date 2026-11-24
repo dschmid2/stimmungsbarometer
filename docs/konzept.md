@@ -40,13 +40,13 @@ Verworfen: fertige programmierbare USB-Buzzer (AliExpress) am Raspi; Prototyp al
 | --- | --- |
 | Code | https://github.com/dschmid2/stimmungsbarometer |
 | Hosting | Vercel, Team „Peakpassion“, Projekt `stimmungsbarometer` |
-| Produktion | https://stimmungsbarometer-peakpassion.vercel.app |
+| Produktion | https://stimmungs-barometer.vercel.app |
 | Datenbank | Supabase-Projekt `wertebarometer` (`lxuwfwbrlfofafwscojq`, eu-west-1), Schema `stimmung` |
 | Plattform-Admin | ddschmid@gmail.com |
 
 ## Offene Punkte
 
-- [ ] Supabase: Redirect-URL `https://stimmungsbarometer-peakpassion.vercel.app/app` eintragen (Site URL nicht ändern, gehört zum Wertebarometer)
+- [ ] Supabase: Redirect-URL `https://stimmungs-barometer.vercel.app/app` eintragen (Site URL nicht ändern, gehört zum Wertebarometer)
 - [ ] Anmeldung per E-Mail-Link einmal end-to-end testen
 - [ ] Eigener E-Mail-Versand (SMTP) in Supabase; der Standardversand ist stark begrenzt
 - [ ] Später eigenes Supabase-Projekt, Standort Zürich (Pro-Plan oder ein Projekt pausieren) – dann Schema per Migration umziehen

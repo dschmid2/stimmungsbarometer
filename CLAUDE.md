@@ -62,7 +62,7 @@ Bei Schemaänderungen den Flow-Test erweitern, besonders Zugriffssperren (anon, 
 
 ## Deployment
 
-- Vercel-Projekt `stimmungsbarometer` (Team Peakpassion), verknüpft mit diesem Repo. `main` → Produktion (`https://stimmungsbarometer-peakpassion.vercel.app`), jeder Branch/PR → Vorschau (mit Vercel-Login geschützt).
+- Vercel-Projekt `stimmungsbarometer` (Team Peakpassion), verknüpft mit diesem Repo. `main` → Produktion (`https://stimmungs-barometer.vercel.app`), jeder Branch/PR → Vorschau (mit Vercel-Login geschützt).
 - Umgebungsvariablen: `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY` (öffentlich, im Browser).
 - SPA-Rewrites in `vercel.json`.
 - Raspi: `raspi/install.sh` öffnet `$APP_URL/terminal`. Bei Domainwechsel dort und in der README anpassen.
