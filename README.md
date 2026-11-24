@@ -52,7 +52,7 @@ psql -d sbtest -f supabase/tests/flow_test.sql
 
 ## Einmalige Einrichtung in Supabase
 
-1. **Redirect-URL erlauben:** Supabase-Dashboard → Authentication → URL Configuration → *Redirect URLs* → die Adresse der App mit `/app` hinzufügen, z. B. `https://stimmungsbarometer.vercel.app/app` (und für lokale Entwicklung `http://localhost:5173/app`). Die *Site URL* nicht ändern, sie gehört zum Wertebarometer.
+1. **Redirect-URL erlauben:** Supabase-Dashboard → Authentication → URL Configuration → *Redirect URLs* → die Adresse der App mit `/app` hinzufügen, z. B. `https://stimmungsbarometer-peakpassion.vercel.app/app` (und für lokale Entwicklung `http://localhost:5173/app`). Die *Site URL* nicht ändern, sie gehört zum Wertebarometer.
 2. **Plattform-Admin:** ist gesetzt (Tabelle `stimmung.platform_admins`). Weitere per SQL:
    `insert into stimmung.platform_admins (user_id) select id from auth.users where email = '…';`
 

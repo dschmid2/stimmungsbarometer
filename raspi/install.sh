@@ -4,7 +4,7 @@
 # Andere Adresse:                                       APP_URL=https://… bash install.sh
 set -e
 
-APP_URL="${APP_URL:-https://stimmungsbarometer.vercel.app}"
+APP_URL="${APP_URL:-https://stimmungsbarometer-peakpassion.vercel.app}"
 URL="$APP_URL/terminal"
 
 echo "1/4 Pakete installieren …"
