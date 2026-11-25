@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Stimmungsbarometer – Buzzer-Dienst für Raspberry Pi 4
+Stimmungsbarometer – Buzzer-Dienst für Raspberry Pi 3 und 4
 
 Liest die drei Arcade-Buttons an den GPIO-Pins, meldet sich beim System als
 Tastatur und "tippt" 1 / 2 / 3. Die Cloud-Anwendung im Browser versteht diese

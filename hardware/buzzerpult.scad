@@ -28,21 +28,41 @@ bt  = 3.0;     // Stärke der Bodenplatte
 rc  = 6;       // Eckradius (senkrechte Kanten)
 
 // ---------- Buttons ----------
-btn_hole   = 24.5;   // Montageloch – mit Lochtest prüfen! (typisch 24 mm, manche 28 mm)
+btn_hole_nom = 24;   // Bohrung laut Button-Hersteller
+hole_clr   = 0.3;    // Zugabe: gedruckte Löcher werden etwas kleiner (mit Lochtest prüfen)
+btn_hole   = btn_hole_nom + hole_clr;
 btn_pitch  = 75;     // Abstand der Button-Mitten
 btn_y      = 55;     // Lage der Buttons in der Tiefe (von vorn, auf der Pultfläche)
 btn_cap    = 60;     // Kappendurchmesser (nur Darstellung)
 btn_below  = 52.5;   // Bautiefe unter der Platte inkl. Mikroschalter
 btn_env_d  = 40;     // Freiraum-Durchmesser unter der Platte (Schalter + LED-Fassung)
 
-// ---------- Raspberry Pi 4 ----------
+// ---------- Raspberry Pi ----------
+pi_model   = 3;      // 3 = Raspberry Pi 3 B/B+ (Standard), 4 = Raspberry Pi 4
 pi_L = 85;  pi_W = 56;  pi_T = 1.4;
-pi_so      = 5;      // Höhe der Abstandshalter
+pi_so      = 8;      // Höhe der Auflagen; hoch genug, damit die Schnapphaken federn können
 pi_gap     = 1.5;    // Abstand Platinenkante – Innenseite Rückwand
-pi_holes   = [[3.5,3.5],[61.5,3.5],[3.5,52.5],[61.5,52.5]];   // (u,v), v=0 Anschlusskante
-pi_hole_d  = 2.4;    // Vorbohrung M2.5 (selbstschneidend) – für Gewindeeinsätze 3.2
-// Anschlüsse an der Längskante (u = Abstand ab Platinenecke)
-pi_usbc_u  = 11.2;  pi_hdmi0_u = 26.0;  pi_hdmi1_u = 39.5;  pi_audio_u = 53.5;
+pi_holes   = [[3.5,3.5],[61.5,3.5],[3.5,52.5],[61.5,52.5]];   // (u,v), v=0 Anschlusskante; gleich bei Pi 3 und 4
+// Werkzeuglose Halterung: Zentrierstifte durch die Montagelöcher (Ø 2,75 im Pi) + Schnapphaken
+pin_d      = 2.4;    // Stift-Durchmesser
+pin_h      = 2.5;    // Stift-Länge über der Auflage
+clip_w     = 6;      // Breite eines Hakens
+clip_t     = 1.6;    // Stärke des federnden Stegs (dünner = leichter einzurasten)
+clip_gap   = 0.2;    // Luft zwischen Steg und Platinenkante
+clip_lip   = 1.0;    // so weit greift die Nase über die Platine
+// Hakenpositionen: [Kante, Position entlang der Kante]
+//   "front" = Kante mit der GPIO-Leiste (v = 56), Position in u
+//   "inner" = kurze Kante ohne Buchsen (u = 0, SD-Karten-Seite), Position in v (SD-Karte liegt bei v 22–34)
+pi_clips   = [["front", 3], ["front", 72], ["inner", 10], ["inner", 46]];
+// Niederhalter am Oberteil: Nase an der Rückwand über der Platinenkante, zwischen Klinke und LAN-Buchse
+pi_hold_u  = [58.5, 63.5];
+// Anschlüsse an der Rückseite (u = Abstand ab Platinenecke)
+pi_power_u = pi_model == 3 ? 10.6 : 11.2;            // Pi 3: Micro-USB, Pi 4: USB-C
+pi_hdmi_u  = pi_model == 3 ? [32.0] : [26.0, 39.5];  // Pi 3: HDMI, Pi 4: 2 × Micro-HDMI
+pi_audio_u = 53.5;
+// Fenster in der Rückwand: muss die Stecker-Ummantelungen durchlassen
+win_u      = pi_model == 3 ? [3.5, 44.0] : [3.7, 47.0];   // Bereich in u
+win_z      = pi_model == 3 ? [-4.0, 14.0] : [-3.5, 10.5]; // Unterkante relativ zur Platinenoberseite, Höhe
 
 // ---------- Verschraubung ----------
 boss_d     = 9;
@@ -101,6 +121,17 @@ module bosses_solid() {
 
 module rslot(len, w) { hull() { circle(d = w); translate([len, 0]) circle(d = w); } }
 
+// Niederhalter: kleine Nase an der Rückwand, liegt nach dem Zusammenbau 0,3 mm über der
+// Platinenkante und verhindert, dass die Rückseite des Pi beim Einstecken der Kabel abhebt.
+// Unterseite mit 45°-Schräge zur Wand, damit sie ohne Stützen druckt.
+module pi_holddown() {
+  x0 = pix(pi_hold_u[1]); x1 = pix(pi_hold_u[0]);
+  z0 = board_z1 + 0.3;
+  reach = (D - t) - piy(0) + 1.0;          // von der Wand bis 1 mm über die Platine
+  translate([x0, D - t + 0.01, 0]) rotate([90, 0, 90]) linear_extrude(x1 - x0)
+    polygon([[0, z0], [-reach, z0], [-reach, z0 + 2], [0, z0 + 2 + reach]]);
+}
+
 // ------------------------------- Oberteil ---------------------------------
 module shell() {
   difference() {
@@ -109,6 +140,7 @@ module shell() {
       union() {
         difference() { outer_solid(); inner_void(); }
         bosses_solid();
+        pi_holddown();
       }
     }
     // Button-Löcher (senkrecht zur Pultfläche)
@@ -117,11 +149,11 @@ module shell() {
     // Schraublöcher in den Säulen
     for (p = bosses) translate([p[0], p[1], bt - 0.01]) cylinder(d = boss_pilot, h = boss_depth);
 
-    // Rückwand: Fenster für USB-C (Strom) und beide Micro-HDMI
-    x_a = pix(pi_hdmi1_u + 7.5); x_b = pix(pi_usbc_u - 7.5);
-    translate([x_a, D - t - 1, board_z1 - 3.5])
+    // Rückwand: Fenster für Strom (Pi 3: Micro-USB, Pi 4: USB-C) und HDMI
+    x_a = pix(win_u[1]); x_b = pix(win_u[0]);
+    translate([x_a, D - t - 1, board_z1 + win_z[0]])
       rotate([-90, 0, 0]) linear_extrude(t + 2)
-        translate([0, -(10.5)]) rrect(x_b - x_a, 10.5, 2.5);
+        translate([0, -win_z[1]]) rrect(x_b - x_a, win_z[1], 2.5);
     // Rückwand: Audio-Klinke
     translate([pix(pi_audio_u), D - t - 1, board_z1 + 3]) rotate([-90, 0, 0]) cylinder(d = 8, h = t + 2);
 
@@ -143,6 +175,26 @@ module shell() {
 // ------------------------------- Boden ------------------------------------
 rim_h = 3; rim_w = 1.6; rim_clr = 0.3;
 
+// Schnapphaken: federnder Steg neben der Platinenkante, Nase greift über die Platine.
+// Profil im lokalen System: Platinenkante bei y = 0, Platine bei y > 0.
+module clip_profile() {
+  zu = board_z1 + 0.15;                     // Unterseite der Nase knapp über der Platine
+  polygon([
+    [-clip_gap - clip_t, bt - 0.01], [-clip_gap, bt - 0.01], [-clip_gap, zu],
+    [clip_lip, zu], [clip_lip, zu + 0.5],   // kurze senkrechte Kante, dann Einführschräge
+    [-clip_gap, zu + 2.8], [-clip_gap - clip_t, zu + 2.8]
+  ]);
+}
+module clip_local() {          // Kante entlang x, Platine in +y
+  translate([-clip_w/2, 0, 0]) rotate([90, 0, 90]) linear_extrude(clip_w) clip_profile();
+}
+module pi_clip(edge, pos) {
+  if (edge == "front")        // Kante v = 56, Platine liegt in +y
+    translate([pix(pos), piy(pi_W), 0]) clip_local();
+  else if (edge == "inner")   // Kante u = 0, Platine liegt in −x
+    translate([pix(0), piy(pos), 0]) rotate([0, 0, 90]) clip_local();
+}
+
 module base() {
   difference() {
     union() {
@@ -156,16 +208,22 @@ module base() {
           }
         for (p = bosses) translate([p[0], p[1], 0]) cylinder(d = boss_d + 1.2, h = 20);
       }
-      // Pi-Abstandshalter
-      for (h = pi_holes) translate([pix(h[0]), piy(h[1]), bt - 0.01]) cylinder(d = 6.5, h = pi_so);
+      // Pi-Auflagen mit Zentrierstiften (keine Schrauben)
+      for (h = pi_holes) translate([pix(h[0]), piy(h[1]), bt - 0.01]) {
+        cylinder(d = 6.5, h = pi_so);
+        translate([0, 0, pi_so - 0.01]) {
+          cylinder(d = pin_d, h = pin_h - 0.6);
+          translate([0, 0, pin_h - 0.61]) cylinder(d1 = pin_d, d2 = pin_d - 0.8, h = 0.6);   // Fase zum Einfädeln
+        }
+      }
+      // Schnapphaken
+      for (c = pi_clips) pi_clip(c[0], c[1]);
     }
     // Schrauben von unten in die Säulen (Senkkopf)
     for (p = bosses) translate([p[0], p[1], -0.01]) {
       cylinder(d = 3.4, h = bt + 1);
       cylinder(d1 = 6.6, d2 = 3.4, h = 1.8);
     }
-    // Pi-Schraublöcher
-    for (h = pi_holes) translate([pix(h[0]), piy(h[1]), 1.0]) cylinder(d = pi_hole_d, h = pi_so + bt);
     // Lüftungsschlitze unter dem Pi
     for (x = [pix(76) : 7 : pix(10)]) translate([x, piy(48), -1])
       linear_extrude(bt + 2) rotate(90) rslot(piy(8) - piy(48), 3.2);
@@ -180,7 +238,7 @@ module base() {
 
 // ------------------------------- Lochtest ---------------------------------
 module hole_test() {
-  ds = [24, 25, 26, 28, 30];
+  ds = [23.8, 24.0, 24.3, 24.6, 25.0];   // um die Herstellerangabe 24 mm herum
   difference() {
     linear_extrude(tt) rrect(5*36 + 6, 46, 4);
     for (i = [0:4]) {
@@ -194,12 +252,16 @@ module hole_test() {
 // ------------------------------- Darstellung ------------------------------
 module pi_dummy() {
   color("green") translate([pix(pi_L), piy(pi_W), board_z0]) cube([pi_L, pi_W, pi_T]);
-  // Anschlüsse hinten
-  color("silver") for (u = [pi_usbc_u, pi_hdmi0_u, pi_hdmi1_u])
-    translate([pix(u) - 4.5, piy(7.5), board_z1]) cube([9, 8.5, 3.3]);
+  // Anschlüsse hinten (ragen bis 1 mm über die Platinenkante)
+  color("silver") translate([pix(pi_power_u) - 4, piy(5.5), board_z1]) cube([8, 6.5, 3]);
+  color("silver") for (u = pi_hdmi_u)
+    if (pi_model == 3) translate([pix(u) - 7.5, piy(11), board_z1]) cube([15, 12, 6.5]);
+    else translate([pix(u) - 4.5, piy(7.5), board_z1]) cube([9, 8.5, 3.3]);
   color("black") translate([pix(pi_audio_u) - 3.5, piy(12), board_z1]) cube([7, 12, 6]);
-  // USB/LAN links
+  // USB/LAN links (ragen 2,5 mm über die Platinenkante)
   color("silver") translate([pix(pi_L + 2.5), piy(54), board_z1]) cube([21, 52, 16]);
+  // SD-Karte unten an der inneren kurzen Kante
+  color("dimgray") translate([pix(0) - 12, piy(34), board_z0 - 1.5]) cube([14.5, 12, 1.5]);
 }
 
 module button_dummy(i, c) {

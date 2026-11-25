@@ -1,22 +1,25 @@
 # Buzzer-Pult – Bauanleitung
 
-Stand: 24.11.2026
+Stand: 25.11.2026
 
 ## Überblick
 
-Das Buzzer-Pult ist ein 3D-gedrucktes Gehäuse von 240 × 150 mm. Darin sitzen ein Raspberry Pi 4 und drei beleuchtete 60-mm-Buttons in Rot, Gelb und Grün. Die Bedienfläche ist leicht geneigt: vorn 55 mm hoch, hinten 82 mm. So passt das Pult vor den Monitor, ohne den Bildschirm zu verdecken.
+Das Buzzer-Pult ist ein 3D-gedrucktes Gehäuse von 240 × 150 mm. Darin sitzen ein Raspberry Pi 3 (Modell B oder B+) und drei beleuchtete 60-mm-Buttons (Bohrung 24 mm) in Rot, Gelb und Grün. Die Bedienfläche ist leicht geneigt: vorn 55 mm hoch, hinten 82 mm. So passt das Pult vor den Monitor, ohne den Bildschirm zu verdecken.
 
-- **Strom und Bild:** Der USB-C-Stromanschluss und beide Micro-HDMI-Buchsen des Pi zeigen durch ein Fenster in der Rückwand nach hinten. Dort stecken Sie Netzteil und Monitorkabel ein.
+- **Strom und Bild:** Der Micro-USB-Stromanschluss und die HDMI-Buchse des Pi zeigen durch ein Fenster in der Rückwand nach hinten. Dort stecken Sie Netzteil und Monitorkabel ein.
 - **Stromversorgung:** Alles läuft über das Netzteil des Pi. Die LEDs der Buttons bekommen 5 V vom Pi und werden über eine kleine Treiberplatine (ULN2003) geschaltet. Ein zweites Netzteil ist nicht nötig. Für Buttons mit 12-V-LEDs siehe [Variante 12 V](#variante-buttons-mit-12-v-leds).
 - **Rückmeldung:** Im Ruhezustand pulsieren die Buttons abwechselnd, als Welle von Rot über Gelb nach Grün. Ein Durchlauf dauert 3 Sekunden. Nach einem Druck blinkt der gedrückte Button hell, die anderen gehen aus. Nach knapp 3 Sekunden ist das Pult wieder bereit, passend zur Sperrzeit der Web-App.
+- **Ohne Schrauben:** Der Pi wird auf vier Stifte gesetzt und nach unten gedrückt, bis vier Haken über dem Platinenrand einrasten. Beim Aufsetzen des Oberteils legt sich hinten eine kleine Nase über die Platine, damit sie beim Einstecken der Kabel nicht abhebt.
 - **Service:** USB- und LAN-Buchsen sind über ein Fenster in der linken Seitenwand erreichbar, etwa für Tastatur und Maus bei der Einrichtung. Die Bodenplatte lässt sich abschrauben, darunter liegt die SD-Karte.
 - **Dateien:** Druckdateien und OpenSCAD-Quelle in [`../hardware/`](../hardware/), Software für den Pi in [`../raspi/`](../raspi/).
 
 ![Ansicht von vorn: drei Buttons auf der geneigten Pultfläche](bilder/pult_vorne.png)
 
-![Rückseite: Fenster für USB-C und Micro-HDMI, Lüftungsschlitze](bilder/pult_rueckseite.png)
+![Rückseite: Fenster für Micro-USB-Strom und HDMI, Lüftungsschlitze](bilder/pult_rueckseite.png)
 
 ![Innenleben ohne Oberteil: Pi hinten, Button-Schalter mit Abstand darüber](bilder/pult_innen.png)
+
+![Pi-Halterung auf der Bodenplatte: vier Stifte und vier Schnapphaken](bilder/pi_halterung.png)
 
 ## Stückliste
 
@@ -24,20 +27,19 @@ Entscheidend bei den Buttons: Die eingebaute LED muss mit 5 V leuchten. Modelle 
 
 | Teil | Menge | Hinweis | Bezugsquelle |
 | --- | --- | --- | --- |
-| Raspberry Pi 4 mit offiziellem USB-C-Netzteil (5,1 V, 3 A) | 1 | vorhanden | – |
+| Raspberry Pi 3 Modell B oder B+ mit offiziellem Micro-USB-Netzteil (5,1 V, 2,5 A) | 1 | vorhanden | – |
 | microSD-Karte, ab 16 GB | 1 | vorhanden | – |
-| Kühlkörper-Set für Pi 4 | 1 | empfohlen, da das Gehäuse geschlossen ist | Elektronikhandel |
-| Arcade-Button 60 mm, beleuchtet, rot / gelb / grün | je 1 | LED 5–12 V mit Vorwiderstand | [Purecrea bei digitec](https://www.digitec.ch/en/s1/product/purecrea-arcade-button-illuminated-60mm-red-buttons-switches-36688812) oder [Adafruit 60 mm](https://www.adafruit.com/product/1194) |
+| Kühlkörper für Pi 3 | 1 | empfohlen, da das Gehäuse geschlossen ist | Elektronikhandel |
+| Arcade-Button 60 mm, Bohrung 24 mm, beleuchtet, rot / gelb / grün | je 1 | LED 5–12 V mit Vorwiderstand | [Purecrea bei digitec](https://www.digitec.ch/en/s1/product/purecrea-arcade-button-illuminated-60mm-red-buttons-switches-36688812) oder [Adafruit 60 mm](https://www.adafruit.com/product/1194) |
 | ULN2003-Treiberplatine („Schrittmotor-Treiber“, 4 Kanäle) | 1 | schaltet die drei LEDs | Elektronikhandel, Amazon |
 | Dupont-Kabel Buchse–Buchse, ca. 20 cm | ca. 15 | für GPIO und Treiberplatine | Elektronikhandel |
 | Flachsteckhülsen passend zu den Button-Kontakten | ca. 12 | Taster meist 4,8 mm, LED je nach Modell; alternativ löten | Elektronikhandel |
 | Kunststoffschraube 3 × 10 mm, Senkkopf | 5 | Boden an Oberteil | Baumarkt |
-| Schraube M2,5 × 6 mm (selbstschneidend) | 4 | Pi auf dem Boden | Elektronikhandel |
 | Gummifüße Ø 12 mm, selbstklebend | 5 | rutschfest vor dem Monitor | Baumarkt |
-| Micro-HDMI-auf-HDMI-Kabel | 1 | zum Monitor | Elektronikhandel |
+| HDMI-Kabel | 1 | zum Monitor | Elektronikhandel |
 | Filament PETG (oder PLA) | ca. 400 g | PETG hält Wärme besser aus | – |
 
-Der Ton kommt über HDMI aus den Lautsprechern des Monitors. Hat der Monitor keine, passt ein kleiner USB-Lautsprecher an die linke Seite.
+Der Ton kommt über HDMI aus den Lautsprechern des Monitors. Hat der Monitor keine, kommt ein Aktivlautsprecher an die Klinkenbuchse auf der Rückseite oder ein kleiner USB-Lautsprecher an die linke Seite.
 
 ## Gehäuse drucken
 
@@ -47,12 +49,12 @@ Drucken Sie zuerst den Lochtest. Erst wenn die Buttons passen, drucken Sie das G
 | --- | --- | --- |
 | `hardware/Buzzerpult_Lochtest.stl` | flach | 186 × 46 × 3 mm |
 | `hardware/Buzzerpult_Oberteil.stl` | Pultfläche nach unten, schon so ausgerichtet | 240 × 162 × 78 mm |
-| `hardware/Buzzerpult_Boden.stl` | flach, Pi-Halter nach oben | 240 × 150 × 8 mm |
+| `hardware/Buzzerpult_Boden.stl` | flach, Pi-Halterung nach oben | 240 × 150 × 15 mm |
 
-1. **Lochtest:** Die Platte hat Löcher mit 24, 25, 26, 28 und 30 mm. Schrauben Sie einen Button mit seiner Mutter in das passende Loch. Das Gewinde soll frei durchgehen, ohne zu wackeln. Im Gehäuse ist 24,5 mm eingestellt. Passt ein anderes Loch besser, in `hardware/buzzerpult.scad` den Wert `btn_hole` ändern und neu exportieren (siehe [hardware/README.md](../hardware/README.md)).
-2. **Material:** PETG ist wärmefester als PLA, was für den Pi im geschlossenen Gehäuse gut ist. PLA reicht, wenn das Pult nicht in der Sonne steht.
+1. **Lochtest:** Die Bohrung der Buttons ist 24 mm. Gedruckte Löcher fallen meist etwas kleiner aus, deshalb hat die Testplatte Löcher mit 23,8 / 24,0 / 24,3 / 24,6 / 25,0 mm. Schrauben Sie einen Button mit seiner Mutter in das passende Loch. Das Gewinde soll frei durchgehen, ohne zu wackeln. Im Gehäuse ist 24,3 mm eingestellt (24 mm plus 0,3 mm Zugabe). Passt ein anderes Loch besser, in `hardware/buzzerpult.scad` den Wert `hole_clr` (Zugabe) ändern und neu exportieren (siehe [hardware/README.md](../hardware/README.md)).
+2. **Material:** PETG ist wärmefester und zäher als PLA. Für die Bodenplatte mit den federnden Haken ist PETG klar besser, PLA kann beim Einrasten brechen. Das Oberteil geht auch in PLA.
 3. **Einstellungen:** 0,2 mm Schichthöhe, 3 Wandlinien, 15–20 % Füllung.
-4. **Stützen:** Nicht nötig. Die beiden Anschlussfenster werden als Brücken von 45 und 55 mm gedruckt, das schaffen die meisten Drucker. Wer unsicher ist, aktiviert Stützen nur ab Druckbett.
+4. **Stützen:** Nicht nötig. Die beiden Anschlussfenster werden als Brücken von etwa 41 und 55 mm gedruckt, das schaffen die meisten Drucker. Wer unsicher ist, aktiviert Stützen nur ab Druckbett.
 5. **Druckbett zu klein:** Online-Druckdienste drucken die STL-Dateien auf Bestellung, auch in PETG.
 
 ## Verdrahtung
@@ -81,7 +83,7 @@ Die Taster gehen direkt an den Pi, die LEDs über die ULN2003-Platine. Alles wir
 - **Masse:** Die drei COM-Kontakte können Sie mit einem kurzen Kabel verbinden und gemeinsam auf einen GND-Pin führen.
 - **LED-Polung:** Die Kontakte sind meist mit + und − markiert. Leuchtet eine LED im Test nicht, Kabel tauschen.
 - **Jumper:** Viele ULN2003-Platinen haben einen Jumper für die Versorgung. Er muss gesteckt sein.
-- **Strombedarf:** Die drei LEDs brauchen zusammen deutlich unter 100 mA. Das offizielle 3-A-Netzteil des Pi reicht problemlos.
+- **Strombedarf:** Die drei LEDs brauchen zusammen deutlich unter 100 mA. Das offizielle 2,5-A-Netzteil des Pi 3 reicht problemlos.
 
 ## Variante: Buttons mit 12-V-LEDs
 
@@ -112,26 +114,26 @@ Auch Buttons mit reinen 12-V-LEDs laufen am Netzteil des Pi. Ein kleiner Aufwär
 3. **12 V nie an die GPIO-Leiste:** Die Taster bleiben an 3,3-V-Pins und GND. Ein 12-V-Kabel an einem GPIO-Pin beschädigt den Pi.
 4. **Einbau:** Den Wandler mit doppelseitigem Klebeband hinten rechts neben die ULN2003-Platine kleben, mit der Platine nach oben und ohne Kontakt zu anderen Teilen.
 
-**Strom:** Drei 12-V-LEDs brauchen zusammen typischerweise 30–60 mA. Auf der 5-V-Seite sind das grob 100–170 mA, inklusive Verlust im Wandler. Das offizielle 3-A-Netzteil des Pi 4 reicht dafür gut.
+**Strom:** Drei 12-V-LEDs brauchen zusammen typischerweise 30–60 mA. Auf der 5-V-Seite sind das grob 100–170 mA, inklusive Verlust im Wandler. Das offizielle 2,5-A-Netzteil des Pi 3 reicht dafür gut.
 
 ## Zusammenbau
 
 Der Pi sitzt hinten links, wenn Sie von vorn auf das Pult schauen. Testen Sie alles, bevor Sie das Gehäuse zuschrauben.
 
 1. **Kühlkörper** auf die Chips des Pi kleben.
-2. **Pi auf den Boden schrauben:** vier Schrauben M2,5 in die Abstandshalter. Die Seite mit USB-C und Micro-HDMI zeigt zur hinteren Kante, die USB- und LAN-Buchsen zur linken.
+2. **Pi einklicken:** SD-Karte vorher einstecken. Den Pi so halten, dass Strom- und HDMI-Buchse zur hinteren Kante zeigen und die USB- und LAN-Buchsen zur linken. Die Montagelöcher über die vier Stifte setzen und die Platine gleichmässig nach unten drücken, bis die vier Haken hörbar einrasten. Zum Herausnehmen die beiden Haken an der GPIO-Seite mit dem Finger leicht nach aussen drücken und die Platine anheben.
 3. **ULN2003-Platine** (und bei der 12-V-Variante den Wandler) mit doppelseitigem Klebeband hinten rechts neben den Pi kleben. Dort ist sie vor den Buttons sicher, deren Schalter bis etwa 1 cm über den Boden reichen.
 4. **Buttons einsetzen:** Mikroschalter und LED-Fassung abnehmen, den Button von oben durch das Loch stecken, die Mutter von innen festdrehen. Danach Fassung und Schalter wieder aufsetzen. Von vorn gesehen: rot links, gelb Mitte, grün rechts.
 5. **Verdrahten** nach der Tabelle oben. Die Kabel zu den Buttons grosszügig lassen, damit Sie das Oberteil später abheben können.
 6. **Testen**, solange das Gehäuse offen ist: Software installieren und den Testmodus starten (nächster Abschnitt). Jeder Button muss die richtige Ziffer melden und seine LED blinken lassen.
 7. **Schliessen:** Oberteil auf den Boden setzen. Ein Rand auf der Bodenplatte zentriert es. Dann von unten mit fünf Schrauben 3 × 10 befestigen und die Gummifüsse in die runden Vertiefungen kleben.
-8. **Anschliessen:** Pult vor den Monitor stellen, auf der Rückseite Micro-HDMI zum Monitor und zuletzt das USB-C-Netzteil einstecken.
+8. **Anschliessen:** Pult vor den Monitor stellen, auf der Rückseite das HDMI-Kabel zum Monitor und zuletzt das Micro-USB-Netzteil einstecken.
 
 ## Software auf dem Raspi
 
 Ein kleiner Dienst (`raspi/buzzer.py`) liest die Buttons, „tippt“ die Tasten 1, 2 und 3 und steuert die LEDs. Der Browser startet beim Einschalten im Vollbild die Terminal-Seite der Web-App (`/terminal`). Ein Benutzerkonto braucht das Gerät nicht: Es wird mit einem Code gekoppelt.
 
-1. **Betriebssystem:** Mit dem Raspberry Pi Imager „Raspberry Pi OS (64-bit)“ mit Desktop auf die SD-Karte schreiben. Im Imager gleich WLAN, Benutzer und Passwort eintragen.
+1. **Betriebssystem:** Mit dem Raspberry Pi Imager „Raspberry Pi OS (64-bit)“ mit Desktop auf die SD-Karte schreiben (Gerät: Raspberry Pi 3). Im Imager gleich WLAN, Benutzer und Passwort eintragen. Der Pi 3 hat 1 GB Arbeitsspeicher: Für die eine Terminal-Seite reicht das, weitere Programme sollten nicht laufen.
 2. **Dateien kopieren:** den Ordner `raspi/` aus dem Repository auf den Pi legen, zum Beispiel per USB-Stick oder `git clone`.
 3. **Installieren:** Im Terminal in diesen Ordner wechseln und `bash install.sh` ausführen. Das Skript installiert die Pakete, richtet den Buzzer-Dienst ein, trägt den Browser-Autostart ein und schaltet den Bildschirmschoner aus. Andere Adresse der App: `APP_URL=https://… bash install.sh`.
 4. **Neu starten** mit `sudo reboot`. Der Bildschirm zeigt einen 6-stelligen Kopplungscode.
@@ -166,5 +168,6 @@ Nach einer Änderung die Datei nach `/opt/stimmungsbarometer/` kopieren und `sud
 | Oben rechts „offline“ | keine Internetverbindung | Antworten werden im Gerät gepuffert und nachgesendet, sobald die Verbindung zurück ist |
 | Kein Ton | Tonausgabe nicht auf HDMI oder Monitor stumm | Im Desktop oben rechts über das Lautsprechersymbol HDMI wählen, Lautstärke am Monitor prüfen |
 | Pi wird sehr warm | Gehäuse geschlossen, keine Kühlkörper | Kühlkörper aufkleben, Lüftungsschlitze freihalten. `vcgencmd measure_temp` zeigt die Temperatur, ab 80 °C drosselt der Pi |
-| Button-Gewinde passt nicht ins Loch | anderer Lochdurchmesser | Lochtest prüfen, `btn_hole` in `buzzerpult.scad` anpassen |
+| Button-Gewinde passt nicht ins Loch | Drucker druckt Löcher enger oder weiter | Lochtest prüfen, `hole_clr` in `buzzerpult.scad` anpassen |
+| Haken rasten nicht ein oder brechen | Material zu spröde oder Platine schräg aufgesetzt | Bodenplatte in PETG drucken; Platine erst auf alle vier Stifte setzen, dann gleichmässig drücken. Bei Bedarf `clip_t` (Stegstärke) in `buzzerpult.scad` verringern |
 | Oberteil zu gross für den Drucker | Druckbett unter 240 × 162 mm | Online-Druckdienst nutzen |

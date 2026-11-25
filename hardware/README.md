@@ -1,13 +1,13 @@
 # Hardware – Buzzer-Pult
 
-3D-Druckgehäuse für Raspberry Pi 4 und drei beleuchtete 60-mm-Arcade-Buttons. Vollständige Bauanleitung: [`../docs/bauanleitung.md`](../docs/bauanleitung.md).
+3D-Druckgehäuse für Raspberry Pi 3 (B/B+, wahlweise Pi 4) und drei beleuchtete 60-mm-Arcade-Buttons mit 24-mm-Bohrung. Vollständige Bauanleitung: [`../docs/bauanleitung.md`](../docs/bauanleitung.md).
 
 | Datei | Inhalt |
 | --- | --- |
 | `buzzerpult.scad` | Parametrische Quelle (OpenSCAD). Alle Masse oben in der Datei. |
 | `Buzzerpult_Oberteil.stl` | Pultdeckel mit Wänden, bereits zum Drucken ausgerichtet (Pultfläche nach unten) |
-| `Buzzerpult_Boden.stl` | Bodenplatte mit Pi-Abstandshaltern, Zentrierrand, Lüftung, Mulden für Gummifüsse |
-| `Buzzerpult_Lochtest.stl` | Testplatte mit Löchern 24/25/26/28/30 mm, um den Button-Durchmesser zu prüfen |
+| `Buzzerpult_Boden.stl` | Bodenplatte mit werkzeugloser Pi-Halterung (4 Zentrierstifte, 4 Schnapphaken), Zentrierrand, Lüftung, Mulden für Gummifüsse |
+| `Buzzerpult_Lochtest.stl` | Testplatte mit Löchern 23,8/24,0/24,3/24,6/25,0 mm, um die Zugabe für die 24-mm-Bohrung zu prüfen |
 
 ## Wichtigste Parameter (`buzzerpult.scad`)
 
@@ -15,13 +15,20 @@
 | --- | --- | --- |
 | `W`, `D` | 240, 150 | Breite und Tiefe in mm |
 | `Hf`, `Hr` | 55, 82 | Höhe vorn und hinten (Oberkante) |
-| `btn_hole` | 24.5 | Montageloch der Buttons – mit dem Lochtest prüfen |
+| `btn_hole_nom` | 24 | Bohrung laut Button-Hersteller |
+| `hole_clr` | 0.3 | Zugabe, weil gedruckte Löcher kleiner werden – mit dem Lochtest prüfen |
 | `btn_pitch` | 75 | Abstand der Button-Mitten |
 | `btn_y` | 55 | Lage der Buttons von vorn |
 | `btn_below` | 52.5 | Bautiefe der Buttons unter der Platte (für die Kollisionsprüfung) |
-| `pi_*` | Pi 4 | Lage der Anschlüsse; Pi um 180° gedreht, USB-C/HDMI nach hinten |
+| `pi_model` | 3 | 3 = Raspberry Pi 3 B/B+ (Micro-USB + HDMI), 4 = Raspberry Pi 4 (USB-C + 2 × Micro-HDMI). Steuert das Fenster in der Rückwand. |
+| `pi_so` | 8 | Höhe der Pi-Auflagen; bestimmt auch die Federlänge der Haken |
+| `pin_d`, `pin_h` | 2.4, 2.5 | Zentrierstifte durch die Montagelöcher (Ø 2,75 im Pi) |
+| `clip_t`, `clip_lip` | 1.6, 1.0 | Stärke des federnden Stegs und Überstand der Nase; dünner = leichter einzurasten |
+| `pi_clips` | 2 × vorne, 2 × innen | Lage der Haken; innen ausserhalb der SD-Karte (v 22–34) |
 
-Geometrie-Annahmen: Unter den Buttons bleibt ein Freiraum von Ø 40 mm × 52,5 mm. Er kollidiert weder mit dem Pi noch mit Wänden oder Schraubsäulen (geprüft mit einer Schnittmenge in OpenSCAD).
+Geometrie-Annahmen: Unter den Buttons bleibt ein Freiraum von Ø 40 mm × 52,5 mm. Er kollidiert weder mit dem Pi, den Haken noch mit Wänden oder Schraubsäulen. Geprüft mit Schnittmengen in OpenSCAD: Pi ↔ Oberteil frei, Pi ↔ Boden nur die Stifte in den Montagelöchern, Haken-Nasen 0,15 mm und Niederhalter-Nase 0,3 mm über der Platine.
+
+**Pi-Halterung ohne Schrauben:** Der Pi sitzt auf vier Auflagen (8 mm) mit Zentrierstiften. Zwei Haken greifen an der GPIO-Kante, zwei an der kurzen Kante ohne Buchsen (neben der SD-Karte). An der Rückwand des Oberteils sitzt eine Nase (`pi_holddown`), die beim Schliessen die Anschlusskante niederhält. Die Bodenplatte in PETG drucken, damit die Haken federn statt brechen.
 
 ## Neu exportieren
 

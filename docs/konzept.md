@@ -1,6 +1,6 @@
 # Stimmungsbarometer – Konzept und Entscheidungen
 
-Stand: 24.11.2026 · Kulturarchitekt (Change-Management, Transformation, Unternehmensentwicklung)
+Stand: 25.11.2026 · Kulturarchitekt (Change-Management, Transformation, Unternehmensentwicklung)
 
 ## Idee
 
@@ -31,6 +31,8 @@ Es gibt fertige Smiley-Terminals mit Auswertung, unter anderem HappyOrNot (Finnl
 | 24.11.2026 | Eigene Webanwendung: mandantenfähig (mehrere Kunden), Vercel + Supabase, Terminals per Kopplungscode |
 | 24.11.2026 | Datenbank vorerst im Supabase-Projekt „wertebarometer“ (Gratisplan: max. 2 Projekte), eigenes Schema `stimmung` |
 | 24.11.2026 | Weiterentwicklung in Claude Code über dieses Repository |
+| 24.11.2026 | Produktionsadresse `stimmungs-barometer.vercel.app` (`stimmungsbarometer.vercel.app` ist vergeben) |
+| 25.11.2026 | Raspberry Pi 3 statt Pi 4; Button-Bohrung 24 mm; Pi ohne Schrauben (Stifte + Schnapphaken + Niederhalter am Oberteil) |
 
 Verworfen: fertige programmierbare USB-Buzzer (AliExpress) am Raspi; Prototyp als claude.ai-Artefakt (Terminal brauchte ein claude.ai-Konto). Der Prototyp liegt zum Nachschlagen in [`prototyp/artefakt-prototyp.html`](prototyp/artefakt-prototyp.html); er läuft nur innerhalb von claude.ai.
 
@@ -50,6 +52,7 @@ Verworfen: fertige programmierbare USB-Buzzer (AliExpress) am Raspi; Prototyp al
 - [ ] Anmeldung per E-Mail-Link einmal end-to-end testen
 - [ ] Eigener E-Mail-Versand (SMTP) in Supabase; der Standardversand ist stark begrenzt
 - [ ] Später eigenes Supabase-Projekt, Standort Zürich (Pro-Plan oder ein Projekt pausieren) – dann Schema per Migration umziehen
-- [ ] Lochtest drucken, Durchmesser bestätigen; 5-V- oder 12-V-Buttons entscheiden
+- [ ] Lochtest drucken, Zugabe für die 24-mm-Bohrung bestätigen; 5-V- oder 12-V-Buttons entscheiden
+- [ ] Probedruck der Bodenplatte: Einrasten der Haken mit dem echten Pi 3 prüfen
 - [ ] Eigene Domain (z. B. Subdomain von Kulturarchitekt) statt `*.vercel.app`
 - [ ] Datenschutzerklärung und Hinweis am Terminal

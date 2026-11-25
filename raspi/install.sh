@@ -1,5 +1,5 @@
 #!/bin/bash
-# Stimmungsbarometer – Einrichtung auf dem Raspberry Pi 4 (Raspberry Pi OS mit Desktop)
+# Stimmungsbarometer – Einrichtung auf dem Raspberry Pi 3 oder 4 (Raspberry Pi OS mit Desktop)
 # Aufruf im Ordner mit buzzer.py und buzzer.service:   bash install.sh
 # Andere Adresse:                                       APP_URL=https://… bash install.sh
 set -e
