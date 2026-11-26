@@ -72,7 +72,7 @@ Bei Schemaänderungen den Flow-Test erweitern, besonders Zugriffssperren (anon, 
 - Sperrzeit nach einem Druck: `LOCK_MS = 2800` in `pages/Terminal.tsx` und `LOCK_S = 2.8` in `raspi/buzzer.py`.
 - Tastenbelegung: 1/2/3 (auch Ziffernblock, A/S/D, Pfeiltasten) in `Terminal.tsx`; `buzzer.py` sendet KEY_1..KEY_3.
 - Server-Rate-Limit: 1 Live-Stimme pro Sekunde und Terminal (`sb_terminal_vote`); nachgereichte Offline-Stimmen tragen `p_at` und sind ausgenommen.
-- Weiter-Button (weiss): `buzzer.py` sendet KEY_4 (GPIO 23, LED GPIO 19). Die Web-App soll Taste 4 als „nächste Frage“ verstehen – **noch nicht umgesetzt**, Vorgabe in `docs/konzept.md` → „Weiter-Button“.
+- Weiter-Button (weiss): `buzzer.py` sendet KEY_4 (GPIO 23, LED GPIO 19). Die Web-App soll Taste 4 als „Frage überspringen“ verstehen; nach jeder Stimme springt das Terminal ohnehin zur nächsten Frage – **noch nicht umgesetzt**, Vorgabe in `docs/konzept.md` → „Weiter-Button“.
 - Ein Terminal-Token ist das Geheimnis aus `sb_terminal_pair_start`; nach dem Koppeln wird es zum Zugangsschlüssel. Entkoppeln = `revoked_at` setzen.
 
 ## Offene Punkte

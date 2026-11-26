@@ -33,6 +33,7 @@ Es gibt fertige Smiley-Terminals mit Auswertung, unter anderem HappyOrNot (Finnl
 | 24.11.2026 | Weiterentwicklung in Claude Code über dieses Repository |
 | 24.11.2026 | Produktionsadresse `stimmungs-barometer.vercel.app` (`stimmungsbarometer.vercel.app` ist vergeben) |
 | 25.11.2026 | Raspberry Pi 3 statt Pi 4; Button-Bohrung 24 mm; Pi ohne Schrauben (Stifte + Schnapphaken + Niederhalter am Oberteil) |
+| 26.11.2026 | Nach einer Stimme springt das Terminal automatisch zur nächsten Frage; Weiter dient nur zum Überspringen |
 | 26.11.2026 | Vierter Button: weisser 44-mm-„Weiter“-Button (Bohrung 24 mm) hinten rechts, um zur nächsten Frage zu wechseln. Gehäuse bleibt 240 mm breit. Hardware und Raspi-Dienst fertig (Taste 4), Web-App offen |
 
 Verworfen: fertige programmierbare USB-Buzzer (AliExpress) am Raspi; Prototyp als claude.ai-Artefakt (Terminal brauchte ein claude.ai-Konto). Der Prototyp liegt zum Nachschlagen in [`prototyp/artefakt-prototyp.html`](prototyp/artefakt-prototyp.html); er läuft nur innerhalb von claude.ai.
@@ -50,7 +51,8 @@ Verworfen: fertige programmierbare USB-Buzzer (AliExpress) am Raspi; Prototyp al
    - Neue Funktion `sb_question_order(p_org uuid, p_ids uuid[])` (nur Admin) setzt Reihenfolge und Auswahl.
    - `sb_terminal_config` liefert zusätzlich `questions: [...]` in Reihenfolge. `question` bleibt als erste Frage erhalten, damit ältere Terminals weiterlaufen.
 2. **Terminal** (`src/pages/Terminal.tsx`):
-   - Taste 4 (auch `N` und `Enter`) = nächste Frage; nach der letzten wieder die erste.
+   - **Nach einer Stimme** springt das Terminal automatisch zur nächsten Frage, sobald „Danke!“ vorbei ist (nach `LOCK_MS`). Nach der letzten Frage geht es wieder zur ersten.
+   - **Weiter** (Taste 4, auch `N` und `Enter`) überspringt die aktuelle Frage ohne Stimme; nach der letzten wieder die erste.
    - Anzeige „Frage 2 von 3“ und oben rechts ein dezenter Hinweis „Weiter: weisser Button“. Bei nur einer Frage beides ausblenden, Taste 4 ohne Wirkung.
    - Eigener, neutraler Sound (z. B. kurzes „Umblättern“), klar verschieden von den Antwort-Sounds.
    - Nach einer Zeit ohne Druck zurück zur ersten Frage.
@@ -59,10 +61,11 @@ Verworfen: fertige programmierbare USB-Buzzer (AliExpress) am Raspi; Prototyp al
 4. **Verwaltung** (`src/pages/org/Questions.tsx`): mehrere Fragen in die Runde nehmen, Reihenfolge mit Hoch/Runter ändern.
 5. **Tests:** Flow-Test um Reihenfolge und Zugriffssperren erweitern; die Navigation als reine Funktion (z. B. `nextIndex`) mit Unit-Test.
 
+**Entschieden (26.11.2026):** Mit dem Abstimmen springt das Terminal zur nächsten Frage. Weiter ist nur zum Überspringen.
+
 **Noch zu entscheiden**
 
-- Springt das Terminal nach einer Stimme automatisch zur nächsten Frage, oder bleibt es bei der Frage, bis jemand Weiter drückt?
-- Nach wie vielen Sekunden ohne Druck geht es zurück zur ersten Frage (Vorschlag: 60 s)?
+- Nach wie vielen Sekunden ohne Druck geht es zurück zur ersten Frage? Vorschlag: 60 s; bis zur Entscheidung so umsetzen und als Konstante (`IDLE_RESET_MS`) in `Terminal.tsx` führen.
 
 ## Betrieb
 
