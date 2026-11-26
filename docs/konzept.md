@@ -1,6 +1,6 @@
 # Stimmungsbarometer – Konzept und Entscheidungen
 
-Stand: 25.11.2026 · Kulturarchitekt (Change-Management, Transformation, Unternehmensentwicklung)
+Stand: 26.11.2026 · Kulturarchitekt (Change-Management, Transformation, Unternehmensentwicklung)
 
 ## Idee
 
@@ -33,8 +33,36 @@ Es gibt fertige Smiley-Terminals mit Auswertung, unter anderem HappyOrNot (Finnl
 | 24.11.2026 | Weiterentwicklung in Claude Code über dieses Repository |
 | 24.11.2026 | Produktionsadresse `stimmungs-barometer.vercel.app` (`stimmungsbarometer.vercel.app` ist vergeben) |
 | 25.11.2026 | Raspberry Pi 3 statt Pi 4; Button-Bohrung 24 mm; Pi ohne Schrauben (Stifte + Schnapphaken + Niederhalter am Oberteil) |
+| 26.11.2026 | Vierter Button: weisser 44-mm-„Weiter“-Button (Bohrung 24 mm) hinten rechts, um zur nächsten Frage zu wechseln. Gehäuse bleibt 240 mm breit. Hardware und Raspi-Dienst fertig (Taste 4), Web-App offen |
 
 Verworfen: fertige programmierbare USB-Buzzer (AliExpress) am Raspi; Prototyp als claude.ai-Artefakt (Terminal brauchte ein claude.ai-Konto). Der Prototyp liegt zum Nachschlagen in [`prototyp/artefakt-prototyp.html`](prototyp/artefakt-prototyp.html); er läuft nur innerhalb von claude.ai.
+
+## Weiter-Button: Vorgabe für die Web-App (offen)
+
+**Stand:** Gehäuse, Verdrahtung und `raspi/buzzer.py` sind fertig. Der weisse Button sendet die Taste **4** (GPIO 23, LED über ULN2003 IN4 / GPIO 19). Die Web-App reagiert darauf noch nicht.
+
+**Ziel:** Am Terminal kann man zur nächsten Frage wechseln. Damit kann eine Organisation mehrere Fragen gleichzeitig stellen.
+
+**Vorschlag zur Umsetzung**
+
+1. **Datenmodell** (neue Migration, Schema `stimmung`):
+   - Statt genau einer aktiven Frage gibt es eine geordnete Fragenrunde: Spalte `position int` (null = nicht in der Runde). Index `questions_one_active` entfernen; `active` kann wegfallen oder aus `position is not null` abgeleitet werden.
+   - Neue Funktion `sb_question_order(p_org uuid, p_ids uuid[])` (nur Admin) setzt Reihenfolge und Auswahl.
+   - `sb_terminal_config` liefert zusätzlich `questions: [...]` in Reihenfolge. `question` bleibt als erste Frage erhalten, damit ältere Terminals weiterlaufen.
+2. **Terminal** (`src/pages/Terminal.tsx`):
+   - Taste 4 (auch `N` und `Enter`) = nächste Frage; nach der letzten wieder die erste.
+   - Anzeige „Frage 2 von 3“ und oben rechts ein dezenter Hinweis „Weiter: weisser Button“. Bei nur einer Frage beides ausblenden, Taste 4 ohne Wirkung.
+   - Eigener, neutraler Sound (z. B. kurzes „Umblättern“), klar verschieden von den Antwort-Sounds.
+   - Nach einer Zeit ohne Druck zurück zur ersten Frage.
+   - Während „Danke!“ angezeigt wird, ist Weiter gesperrt (wie im Raspi-Dienst).
+3. **Datenschutz:** Weiter zählt nicht als Stimme und wird nicht gespeichert (keine Verweildauer, kein Überspringen-Zähler).
+4. **Verwaltung** (`src/pages/org/Questions.tsx`): mehrere Fragen in die Runde nehmen, Reihenfolge mit Hoch/Runter ändern.
+5. **Tests:** Flow-Test um Reihenfolge und Zugriffssperren erweitern; die Navigation als reine Funktion (z. B. `nextIndex`) mit Unit-Test.
+
+**Noch zu entscheiden**
+
+- Springt das Terminal nach einer Stimme automatisch zur nächsten Frage, oder bleibt es bei der Frage, bis jemand Weiter drückt?
+- Nach wie vielen Sekunden ohne Druck geht es zurück zur ersten Frage (Vorschlag: 60 s)?
 
 ## Betrieb
 
@@ -54,5 +82,6 @@ Verworfen: fertige programmierbare USB-Buzzer (AliExpress) am Raspi; Prototyp al
 - [ ] Später eigenes Supabase-Projekt, Standort Zürich (Pro-Plan oder ein Projekt pausieren) – dann Schema per Migration umziehen
 - [ ] Lochtest drucken, Zugabe für die 24-mm-Bohrung bestätigen; 5-V- oder 12-V-Buttons entscheiden
 - [ ] Probedruck der Bodenplatte: Einrasten der Haken mit dem echten Pi 3 prüfen
+- [ ] Weiter-Button in der Web-App umsetzen (siehe oben)
 - [ ] Eigene Domain (z. B. Subdomain von Kulturarchitekt) statt `*.vercel.app`
 - [ ] Datenschutzerklärung und Hinweis am Terminal

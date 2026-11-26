@@ -37,6 +37,18 @@ btn_cap    = 60;     // Kappendurchmesser (nur Darstellung)
 btn_below  = 52.5;   // Bautiefe unter der Platte inkl. Mikroschalter
 btn_env_d  = 40;     // Freiraum-Durchmesser unter der Platte (Schalter + LED-Fassung)
 
+// ---------- Weiter-Button (weiss, kleiner, abgesetzt hinten rechts) ----------
+next_on    = true;   // false = Gehäuse ohne Weiter-Button
+next_cap   = 44;     // Kappendurchmesser
+next_hole  = btn_hole; // gleiche 24-mm-Bohrung wie die Farbbuttons
+next_x     = W/2 + btn_pitch;  // hinter dem grünen Button
+next_y     = 118;    // Lage in der Tiefe (Kappen-Abstand zu den Farbbuttons ca. 11 mm)
+next_below = 52.5;   // Bautiefe unter der Platte (vorsichtig wie bei den grossen Buttons)
+next_env_d = 36;     // Freiraum-Durchmesser unter der Platte
+
+// Platz für die ULN2003-Treiberplatine (nur zur Kollisionsprüfung, wird nicht gedruckt)
+uln_box    = [[110, 100, 3], [52, 38, 18]];   // [Ecke x,y,z], [Grösse]
+
 // ---------- Raspberry Pi ----------
 pi_model   = 3;      // 3 = Raspberry Pi 3 B/B+ (Standard), 4 = Raspberry Pi 4
 pi_L = 85;  pi_W = 56;  pi_T = 1.4;
@@ -115,6 +127,10 @@ module btn_axis(i) {
   translate([btn_x[i], btn_y, ztop(btn_y)]) rotate([a, 0, 0]) children();
 }
 
+module next_axis() {
+  translate([next_x, next_y, ztop(next_y)]) rotate([a, 0, 0]) children();
+}
+
 module bosses_solid() {
   for (p = bosses) translate([p[0], p[1], bt]) cylinder(d = boss_d, h = Hr);
 }
@@ -145,6 +161,7 @@ module shell() {
     }
     // Button-Löcher (senkrecht zur Pultfläche)
     for (i = [0:2]) btn_axis(i) cylinder(d = btn_hole, h = 3*tt + 10, center = true);
+    if (next_on) next_axis() cylinder(d = next_hole, h = 3*tt + 10, center = true);
 
     // Schraublöcher in den Säulen
     for (p = bosses) translate([p[0], p[1], bt - 0.01]) cylinder(d = boss_pilot, h = boss_depth);
@@ -276,6 +293,11 @@ module assembly() {
   color("lightgray") base();
   pi_dummy();
   button_dummy(0, "red"); button_dummy(1, "gold"); button_dummy(2, "limegreen");
+  if (next_on) next_axis() {
+    color("white") cylinder(d = next_cap, h = 13);
+    color("dimgray") translate([0, 0, -tt - next_below]) cylinder(d = 26, h = next_below);
+  }
+  %translate(uln_box[0]) cube(uln_box[1]);
 }
 
 // ------------------------------- Ausgabe ----------------------------------

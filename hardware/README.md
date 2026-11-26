@@ -1,6 +1,6 @@
 # Hardware – Buzzer-Pult
 
-3D-Druckgehäuse für Raspberry Pi 3 (B/B+, wahlweise Pi 4) und drei beleuchtete 60-mm-Arcade-Buttons mit 24-mm-Bohrung. Vollständige Bauanleitung: [`../docs/bauanleitung.md`](../docs/bauanleitung.md).
+3D-Druckgehäuse für Raspberry Pi 3 (B/B+, wahlweise Pi 4), drei beleuchtete 60-mm-Arcade-Buttons und einen weissen 44-mm-Weiter-Button, alle mit 24-mm-Bohrung. Vollständige Bauanleitung: [`../docs/bauanleitung.md`](../docs/bauanleitung.md).
 
 | Datei | Inhalt |
 | --- | --- |
@@ -20,13 +20,16 @@
 | `btn_pitch` | 75 | Abstand der Button-Mitten |
 | `btn_y` | 55 | Lage der Buttons von vorn |
 | `btn_below` | 52.5 | Bautiefe der Buttons unter der Platte (für die Kollisionsprüfung) |
+| `next_on` | true | Weiter-Button (weiss, 44 mm) ein- oder ausschalten |
+| `next_x`, `next_y` | 195, 118 | Lage des Weiter-Buttons (hinter dem grünen Button) |
+| `uln_box` | – | Platz für die ULN2003-Platine; nur für die Kollisionsprüfung |
 | `pi_model` | 3 | 3 = Raspberry Pi 3 B/B+ (Micro-USB + HDMI), 4 = Raspberry Pi 4 (USB-C + 2 × Micro-HDMI). Steuert das Fenster in der Rückwand. |
 | `pi_so` | 8 | Höhe der Pi-Auflagen; bestimmt auch die Federlänge der Haken |
 | `pin_d`, `pin_h` | 2.4, 2.5 | Zentrierstifte durch die Montagelöcher (Ø 2,75 im Pi) |
 | `clip_t`, `clip_lip` | 1.6, 1.0 | Stärke des federnden Stegs und Überstand der Nase; dünner = leichter einzurasten |
 | `pi_clips` | 2 × vorne, 2 × innen | Lage der Haken; innen ausserhalb der SD-Karte (v 22–34) |
 
-Geometrie-Annahmen: Unter den Buttons bleibt ein Freiraum von Ø 40 mm × 52,5 mm. Er kollidiert weder mit dem Pi, den Haken noch mit Wänden oder Schraubsäulen. Geprüft mit Schnittmengen in OpenSCAD: Pi ↔ Oberteil frei, Pi ↔ Boden nur die Stifte in den Montagelöchern, Haken-Nasen 0,15 mm und Niederhalter-Nase 0,3 mm über der Platine.
+Geometrie-Annahmen: Unter den Buttons bleibt ein Freiraum von Ø 40 mm × 52,5 mm. Er kollidiert weder mit dem Pi, den Haken noch mit Wänden oder Schraubsäulen. Dasselbe gilt für den Weiter-Button (Freiraum Ø 36 mm) und den Platz der Treiberplatine; zwischen den Kappen bleiben 12 mm. Geprüft mit Schnittmengen in OpenSCAD: Pi ↔ Oberteil frei, Pi ↔ Boden nur die Stifte in den Montagelöchern, Haken-Nasen 0,15 mm und Niederhalter-Nase 0,3 mm über der Platine.
 
 **Pi-Halterung ohne Schrauben:** Der Pi sitzt auf vier Auflagen (8 mm) mit Zentrierstiften. Zwei Haken greifen an der GPIO-Kante, zwei an der kurzen Kante ohne Buchsen (neben der SD-Karte). An der Rückwand des Oberteils sitzt eine Nase (`pi_holddown`), die beim Schliessen die Anschlusskante niederhält. Die Bodenplatte in PETG drucken, damit die Haken federn statt brechen.
 
