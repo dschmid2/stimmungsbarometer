@@ -18,7 +18,7 @@ part         = "assembly";
 print_orient = false;
 
 // ---------- Hauptmaße ----------
-W   = 240;     // Breite
+W   = 290;     // Breite (Platz für den Weiter-Button rechts neben der Farbreihe)
 D   = 150;     // Tiefe
 Hf  = 55;      // Höhe vorn (Oberkante)
 Hr  = 82;      // Höhe hinten (Oberkante)
@@ -32,6 +32,7 @@ btn_hole_nom = 24;   // Bohrung laut Button-Hersteller
 hole_clr   = 0.3;    // Zugabe: gedruckte Löcher werden etwas kleiner (mit Lochtest prüfen)
 btn_hole   = btn_hole_nom + hole_clr;
 btn_pitch  = 75;     // Abstand der Button-Mitten
+btn_left   = 45;     // Mitte des roten Buttons ab linker Aussenkante
 btn_y      = 55;     // Lage der Buttons in der Tiefe (von vorn, auf der Pultfläche)
 btn_cap    = 60;     // Kappendurchmesser (nur Darstellung)
 btn_below  = 52.5;   // Bautiefe unter der Platte inkl. Mikroschalter
@@ -41,8 +42,8 @@ btn_env_d  = 40;     // Freiraum-Durchmesser unter der Platte (Schalter + LED-Fa
 next_on    = true;   // false = Gehäuse ohne Weiter-Button
 next_cap   = 44;     // Kappendurchmesser
 next_hole  = btn_hole; // gleiche 24-mm-Bohrung wie die Farbbuttons
-next_x     = W/2 + btn_pitch;  // hinter dem grünen Button
-next_y     = 118;    // Lage in der Tiefe (Kappen-Abstand zu den Farbbuttons ca. 11 mm)
+next_x     = btn_left + 2*btn_pitch + 59;  // rechts neben dem grünen Button (Kappenlücke ca. 11 mm)
+next_y     = 34;     // etwas zum Benutzer hin versetzt (Farbreihe liegt bei btn_y = 55)
 next_below = 52.5;   // Bautiefe unter der Platte (vorsichtig wie bei den grossen Buttons)
 next_env_d = 36;     // Freiraum-Durchmesser unter der Platte
 
@@ -89,7 +90,7 @@ board_z0 = bt + pi_so;               // Unterseite Platine
 board_z1 = board_z0 + pi_T;          // Oberseite Platine
 function pix(u) = t + 3 + (pi_L - u);     // Pi um 180° gedreht: Anschlüsse nach hinten, USB/LAN nach links
 function piy(v) = D - t - pi_gap - v;
-btn_x = [W/2 - btn_pitch, W/2, W/2 + btn_pitch];
+btn_x = [btn_left, btn_left + btn_pitch, btn_left + 2*btn_pitch];
 
 $fn = 64;
 

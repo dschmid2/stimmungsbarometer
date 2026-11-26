@@ -33,6 +33,7 @@ Es gibt fertige Smiley-Terminals mit Auswertung, unter anderem HappyOrNot (Finnl
 | 24.11.2026 | Weiterentwicklung in Claude Code über dieses Repository |
 | 24.11.2026 | Produktionsadresse `stimmungs-barometer.vercel.app` (`stimmungsbarometer.vercel.app` ist vergeben) |
 | 25.11.2026 | Raspberry Pi 3 statt Pi 4; Button-Bohrung 24 mm; Pi ohne Schrauben (Stifte + Schnapphaken + Niederhalter am Oberteil) |
+| 26.11.2026 | Weiter-Button rechts neben der Farbreihe, etwas zum Benutzer hin versetzt; Gehäuse dafür 290 mm breit (Drucker mit genug Bauraum vorhanden) |
 | 26.11.2026 | Nach einer Stimme springt das Terminal automatisch zur nächsten Frage; Weiter dient nur zum Überspringen |
 | 26.11.2026 | Vierter Button: weisser 44-mm-„Weiter“-Button (Bohrung 24 mm) hinten rechts, um zur nächsten Frage zu wechseln. Gehäuse bleibt 240 mm breit. Hardware und Raspi-Dienst fertig (Taste 4), Web-App offen |
 

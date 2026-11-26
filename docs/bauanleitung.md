@@ -4,7 +4,7 @@ Stand: 26.11.2026
 
 ## Überblick
 
-Das Buzzer-Pult ist ein 3D-gedrucktes Gehäuse von 240 × 150 mm. Darin sitzen ein Raspberry Pi 3 (Modell B oder B+) drei beleuchtete 60-mm-Buttons (Bohrung 24 mm) in Rot, Gelb und Grün sowie ein weisser 44-mm-Weiter-Button hinten rechts, mit dem man zur nächsten Frage wechselt. Die Bedienfläche ist leicht geneigt: vorn 55 mm hoch, hinten 82 mm. So passt das Pult vor den Monitor, ohne den Bildschirm zu verdecken.
+Das Buzzer-Pult ist ein 3D-gedrucktes Gehäuse von 290 × 150 mm. Darin sitzen ein Raspberry Pi 3 (Modell B oder B+), drei beleuchtete 60-mm-Buttons (Bohrung 24 mm) in Rot, Gelb und Grün in einer Reihe und rechts daneben ein weisser 44-mm-Weiter-Button, etwas zum Benutzer hin versetzt. Mit ihm überspringt man eine Frage. Die Bedienfläche ist leicht geneigt: vorn 55 mm hoch, hinten 82 mm. So passt das Pult vor den Monitor, ohne den Bildschirm zu verdecken.
 
 - **Strom und Bild:** Der Micro-USB-Stromanschluss und die HDMI-Buchse des Pi zeigen durch ein Fenster in der Rückwand nach hinten. Dort stecken Sie Netzteil und Monitorkabel ein.
 - **Stromversorgung:** Alles läuft über das Netzteil des Pi. Die LEDs der Buttons bekommen 5 V vom Pi und werden über eine kleine Treiberplatine (ULN2003) geschaltet. Ein zweites Netzteil ist nicht nötig. Für Buttons mit 12-V-LEDs siehe [Variante 12 V](#variante-buttons-mit-12-v-leds).
@@ -14,7 +14,9 @@ Das Buzzer-Pult ist ein 3D-gedrucktes Gehäuse von 240 × 150 mm. Darin sitzen e
 - **Service:** USB- und LAN-Buchsen sind über ein Fenster in der linken Seitenwand erreichbar, etwa für Tastatur und Maus bei der Einrichtung. Die Bodenplatte lässt sich abschrauben, darunter liegt die SD-Karte.
 - **Dateien:** Druckdateien und OpenSCAD-Quelle in [`../hardware/`](../hardware/), Software für den Pi in [`../raspi/`](../raspi/).
 
-![Ansicht von vorn: drei Buttons auf der geneigten Pultfläche](bilder/pult_vorne.png)
+![Ansicht von vorn: drei Farbbuttons in einer Reihe, rechts der weisse Weiter-Button](bilder/pult_vorne.png)
+
+![Draufsicht: Lage der vier Buttons](bilder/pult_oben.png)
 
 ![Rückseite: Fenster für Micro-USB-Strom und HDMI, Lüftungsschlitze](bilder/pult_rueckseite.png)
 
@@ -45,13 +47,13 @@ Der Ton kommt über HDMI aus den Lautsprechern des Monitors. Hat der Monitor kei
 
 ## Gehäuse drucken
 
-Drucken Sie zuerst den Lochtest. Erst wenn die Buttons passen, drucken Sie das Gehäuse: Das Oberteil braucht ein Druckbett von mindestens 240 × 162 mm.
+Drucken Sie zuerst den Lochtest. Erst wenn die Buttons passen, drucken Sie das Gehäuse: Das Oberteil braucht ein Druckbett von mindestens 290 × 162 mm.
 
 | Datei | Lage auf dem Druckbett | Grösse |
 | --- | --- | --- |
 | `hardware/Buzzerpult_Lochtest.stl` | flach | 186 × 46 × 3 mm |
-| `hardware/Buzzerpult_Oberteil.stl` | Pultfläche nach unten, schon so ausgerichtet | 240 × 162 × 78 mm |
-| `hardware/Buzzerpult_Boden.stl` | flach, Pi-Halterung nach oben | 240 × 150 × 15 mm |
+| `hardware/Buzzerpult_Oberteil.stl` | Pultfläche nach unten, schon so ausgerichtet | 290 × 162 × 78 mm |
+| `hardware/Buzzerpult_Boden.stl` | flach, Pi-Halterung nach oben | 290 × 150 × 15 mm |
 
 1. **Lochtest:** Die Bohrung der Buttons ist 24 mm. Gedruckte Löcher fallen meist etwas kleiner aus, deshalb hat die Testplatte Löcher mit 23,8 / 24,0 / 24,3 / 24,6 / 25,0 mm. Schrauben Sie einen Button mit seiner Mutter in das passende Loch. Das Gewinde soll frei durchgehen, ohne zu wackeln. Im Gehäuse ist 24,3 mm eingestellt (24 mm plus 0,3 mm Zugabe). Passt ein anderes Loch besser, in `hardware/buzzerpult.scad` den Wert `hole_clr` (Zugabe) ändern und neu exportieren (siehe [hardware/README.md](../hardware/README.md)).
 2. **Material:** PETG ist wärmefester und zäher als PLA. Für die Bodenplatte mit den federnden Haken ist PETG klar besser, PLA kann beim Einrasten brechen. Das Oberteil geht auch in PLA.
@@ -130,8 +132,8 @@ Der Pi sitzt hinten links, wenn Sie von vorn auf das Pult schauen. Testen Sie al
 
 1. **Kühlkörper** auf die Chips des Pi kleben.
 2. **Pi einklicken:** SD-Karte vorher einstecken. Den Pi so halten, dass Strom- und HDMI-Buchse zur hinteren Kante zeigen und die USB- und LAN-Buchsen zur linken. Die Montagelöcher über die vier Stifte setzen und die Platine gleichmässig nach unten drücken, bis die vier Haken hörbar einrasten. Zum Herausnehmen die beiden Haken an der GPIO-Seite mit dem Finger leicht nach aussen drücken und die Platine anheben.
-3. **ULN2003-Platine** (und bei der 12-V-Variante den Wandler) mit doppelseitigem Klebeband hinten in der Mitte auf den Boden kleben, rechts neben dem Pi und links vom Weiter-Button (Bereich etwa 52 × 38 mm, siehe Innenansicht). Dort ist sie vor den Schaltern aller vier Buttons sicher.
-4. **Buttons einsetzen:** Mikroschalter und LED-Fassung abnehmen, den Button von oben durch das Loch stecken, die Mutter von innen festdrehen. Danach Fassung und Schalter wieder aufsetzen. Von vorn gesehen: rot links, gelb Mitte, grün rechts, der weisse Weiter-Button hinten rechts.
+3. **ULN2003-Platine** (und bei der 12-V-Variante den Wandler) mit doppelseitigem Klebeband hinten in der Mitte auf den Boden kleben, rechts neben dem Pi (Bereich etwa 52 × 38 mm, siehe Innenansicht). Dort ist sie vor den Schaltern aller vier Buttons sicher.
+4. **Buttons einsetzen:** Mikroschalter und LED-Fassung abnehmen, den Button von oben durch das Loch stecken, die Mutter von innen festdrehen. Danach Fassung und Schalter wieder aufsetzen. Von vorn gesehen: rot links, gelb Mitte, grün rechts, der weisse Weiter-Button ganz rechts, etwas weiter vorne.
 5. **Verdrahten** nach der Tabelle oben. Die Kabel zu den Buttons grosszügig lassen, damit Sie das Oberteil später abheben können.
 6. **Testen**, solange das Gehäuse offen ist: Software installieren und den Testmodus starten (nächster Abschnitt). Jeder Farbbutton muss die richtige Ziffer melden und seine LED blinken lassen, der Weiter-Button meldet „Taste 4“.
 7. **Schliessen:** Oberteil auf den Boden setzen. Ein Rand auf der Bodenplatte zentriert es. Dann von unten mit fünf Schrauben 3 × 10 befestigen und die Gummifüsse in die runden Vertiefungen kleben.
@@ -181,4 +183,4 @@ Nach einer Änderung die Datei nach `/opt/stimmungsbarometer/` kopieren und `sud
 | Pi wird sehr warm | Gehäuse geschlossen, keine Kühlkörper | Kühlkörper aufkleben, Lüftungsschlitze freihalten. `vcgencmd measure_temp` zeigt die Temperatur, ab 80 °C drosselt der Pi |
 | Button-Gewinde passt nicht ins Loch | Drucker druckt Löcher enger oder weiter | Lochtest prüfen, `hole_clr` in `buzzerpult.scad` anpassen |
 | Haken rasten nicht ein oder brechen | Material zu spröde oder Platine schräg aufgesetzt | Bodenplatte in PETG drucken; Platine erst auf alle vier Stifte setzen, dann gleichmässig drücken. Bei Bedarf `clip_t` (Stegstärke) in `buzzerpult.scad` verringern |
-| Oberteil zu gross für den Drucker | Druckbett unter 240 × 162 mm | Online-Druckdienst nutzen |
+| Oberteil zu gross für den Drucker | Druckbett unter 290 × 162 mm | Online-Druckdienst nutzen |
