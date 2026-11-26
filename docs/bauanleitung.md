@@ -11,7 +11,7 @@ Das Buzzer-Pult ist ein 3D-gedrucktes Gehäuse von 290 × 150 mm. Darin sitzen e
 - **Rückmeldung:** Im Ruhezustand pulsieren die Buttons abwechselnd, als Welle von Rot über Gelb nach Grün. Ein Durchlauf dauert 3 Sekunden. Nach einem Druck blinkt der gedrückte Button hell, die anderen gehen aus. Nach knapp 3 Sekunden ist das Pult wieder bereit, passend zur Sperrzeit der Web-App.
 - **Weiter-Button:** kleiner und abgesetzt, damit ihn niemand mit einer Antwort verwechselt. Er leuchtet ruhig und blitzt beim Drücken kurz auf. Er zählt nicht als Stimme.
 - **Ohne Schrauben:** Der Pi wird auf vier Stifte gesetzt und nach unten gedrückt, bis vier Haken über dem Platinenrand einrasten. Beim Aufsetzen des Oberteils legt sich hinten eine kleine Nase über die Platine, damit sie beim Einstecken der Kabel nicht abhebt.
-- **Service:** USB- und LAN-Buchsen sind über ein Fenster in der linken Seitenwand erreichbar, etwa für Tastatur und Maus bei der Einrichtung. Die Bodenplatte lässt sich abschrauben, darunter liegt die SD-Karte.
+- **Service:** USB- und LAN-Buchsen sind über ein Fenster in der linken Seitenwand erreichbar, etwa für Tastatur und Maus bei der Einrichtung. Die SD-Karte erreichen Sie von unten durch eine Klappe im Boden, ohne das Gehäuse zu öffnen (siehe [SD-Karte wechseln](#sd-karte-wechseln)).
 - **Dateien:** Druckdateien und OpenSCAD-Quelle in [`../hardware/`](../hardware/), Software für den Pi in [`../raspi/`](../raspi/).
 
 ![Ansicht von vorn: drei Farbbuttons in einer Reihe, rechts der weisse Weiter-Button](bilder/pult_vorne.png)
@@ -39,7 +39,7 @@ Entscheidend bei den Buttons: Die eingebaute LED muss mit 5 V leuchten. Modelle 
 | Dupont-Kabel Buchse–Buchse, ca. 20 cm | ca. 20 | für GPIO und Treiberplatine | Elektronikhandel |
 | Flachsteckhülsen passend zu den Button-Kontakten | ca. 16 | Taster meist 4,8 mm, LED je nach Modell; alternativ löten | Elektronikhandel |
 | Kunststoffschraube 3 × 10 mm, Senkkopf | 5 | Boden an Oberteil | Baumarkt |
-| Gummifüße Ø 12 mm, selbstklebend | 5 | rutschfest vor dem Monitor | Baumarkt |
+| Gummifüße Ø 12 mm, selbstklebend, mindestens 3,5 mm hoch | 5 | rutschfest vor dem Monitor; halten die SD-Klappe vom Tisch fern | Baumarkt |
 | HDMI-Kabel | 1 | zum Monitor | Elektronikhandel |
 | Filament PETG (oder PLA) | ca. 400 g | PETG hält Wärme besser aus | – |
 
@@ -54,6 +54,7 @@ Drucken Sie zuerst den Lochtest. Erst wenn die Buttons passen, drucken Sie das G
 | `hardware/Buzzerpult_Lochtest.stl` | flach | 186 × 46 × 3 mm |
 | `hardware/Buzzerpult_Oberteil.stl` | Pultfläche nach unten, schon so ausgerichtet | 290 × 162 × 78 mm |
 | `hardware/Buzzerpult_Boden.stl` | flach, Pi-Halterung nach oben | 290 × 150 × 15 mm |
+| `hardware/Buzzerpult_SD-Klappe.stl` | flach, Zapfen nach oben, schon so ausgerichtet | 30 × 48 × 7 mm |
 
 1. **Lochtest:** Die Bohrung der Buttons ist 24 mm. Gedruckte Löcher fallen meist etwas kleiner aus, deshalb hat die Testplatte Löcher mit 23,8 / 24,0 / 24,3 / 24,6 / 25,0 mm. Schrauben Sie einen Button mit seiner Mutter in das passende Loch. Das Gewinde soll frei durchgehen, ohne zu wackeln. Im Gehäuse ist 24,3 mm eingestellt (24 mm plus 0,3 mm Zugabe). Passt ein anderes Loch besser, in `hardware/buzzerpult.scad` den Wert `hole_clr` (Zugabe) ändern und neu exportieren (siehe [hardware/README.md](../hardware/README.md)).
 2. **Material:** PETG ist wärmefester und zäher als PLA. Für die Bodenplatte mit den federnden Haken ist PETG klar besser, PLA kann beim Einrasten brechen. Das Oberteil geht auch in PLA.
@@ -136,8 +137,21 @@ Der Pi sitzt hinten links, wenn Sie von vorn auf das Pult schauen. Testen Sie al
 4. **Buttons einsetzen:** Mikroschalter und LED-Fassung abnehmen, den Button von oben durch das Loch stecken, die Mutter von innen festdrehen. Danach Fassung und Schalter wieder aufsetzen. Von vorn gesehen: rot links, gelb Mitte, grün rechts, der weisse Weiter-Button ganz rechts, etwas weiter vorne.
 5. **Verdrahten** nach der Tabelle oben. Die Kabel zu den Buttons grosszügig lassen, damit Sie das Oberteil später abheben können.
 6. **Testen**, solange das Gehäuse offen ist: Software installieren und den Testmodus starten (nächster Abschnitt). Jeder Farbbutton muss die richtige Ziffer melden und seine LED blinken lassen, der Weiter-Button meldet „Taste 4“.
-7. **Schliessen:** Oberteil auf den Boden setzen. Ein Rand auf der Bodenplatte zentriert es. Dann von unten mit fünf Schrauben 3 × 10 befestigen und die Gummifüsse in die runden Vertiefungen kleben.
+7. **Schliessen:** Oberteil auf den Boden setzen. Ein Rand auf der Bodenplatte zentriert es. Dann von unten mit fünf Schrauben 3 × 10 befestigen und die Gummifüsse in die runden Vertiefungen kleben. Zuletzt die SD-Klappe von unten mit dem Zapfen in das kleine runde Loch neben der Öffnung drücken, bis der Kopf innen einrastet.
 8. **Anschliessen:** Pult vor den Monitor stellen, auf der Rückseite das HDMI-Kabel zum Monitor und zuletzt das Micro-USB-Netzteil einstecken.
+
+## SD-Karte wechseln
+
+Die SD-Karte steckt unter dem Pi. Im Boden ist darunter eine Öffnung, die eine Drehklappe verschliesst.
+
+![Boden von unten: Klappe aufgeschwenkt, darüber die SD-Karte](bilder/sd_klappe.png)
+
+1. Pi herunterfahren und das Netzteil ausstecken. Eine SD-Karte nie im laufenden Betrieb ziehen.
+2. Das Pult vorsichtig auf die Rückseite kippen.
+3. Die Klappe an der geriffelten Ecke zur Seite schwenken, in Richtung der Lüftungsschlitze. Sie springt dabei leicht aus der Öffnung und lässt sich weiterdrehen. In die andere Richtung stösst sie an einen Gummifuss.
+4. In der Öffnung sehen Sie den Rand der Platine und die Kante der SD-Karte. Die Karte mit dem Fingernagel zur Gehäusemitte hin herausziehen.
+5. Die neue Karte mit den Kontakten zur Platine hin ansetzen und bis zum Anschlag einschieben. Sie steht danach noch etwa 2,5 mm über die Platinenkante vor.
+6. Die Klappe zurückschwenken, bis sie in der Öffnung einrastet.
 
 ## Software auf dem Raspi
 
@@ -183,4 +197,5 @@ Nach einer Änderung die Datei nach `/opt/stimmungsbarometer/` kopieren und `sud
 | Pi wird sehr warm | Gehäuse geschlossen, keine Kühlkörper | Kühlkörper aufkleben, Lüftungsschlitze freihalten. `vcgencmd measure_temp` zeigt die Temperatur, ab 80 °C drosselt der Pi |
 | Button-Gewinde passt nicht ins Loch | Drucker druckt Löcher enger oder weiter | Lochtest prüfen, `hole_clr` in `buzzerpult.scad` anpassen |
 | Haken rasten nicht ein oder brechen | Material zu spröde oder Platine schräg aufgesetzt | Bodenplatte in PETG drucken; Platine erst auf alle vier Stifte setzen, dann gleichmässig drücken. Bei Bedarf `clip_t` (Stegstärke) in `buzzerpult.scad` verringern |
+| SD-Klappe hält nicht oder lässt sich kaum drehen | Zapfen zu locker oder zu stramm im Loch | `door_pin_d` in `buzzerpult.scad` um 0,1–0,2 mm anpassen und die Klappe neu drucken; der Boden bleibt gleich |
 | Oberteil zu gross für den Drucker | Druckbett unter 290 × 162 mm | Online-Druckdienst nutzen |

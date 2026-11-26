@@ -7,6 +7,7 @@
 | `buzzerpult.scad` | Parametrische Quelle (OpenSCAD). Alle Masse oben in der Datei. |
 | `Buzzerpult_Oberteil.stl` | Pultdeckel mit Wänden, bereits zum Drucken ausgerichtet (Pultfläche nach unten) |
 | `Buzzerpult_Boden.stl` | Bodenplatte mit werkzeugloser Pi-Halterung (4 Zentrierstifte, 4 Schnapphaken), Zentrierrand, Lüftung, Mulden für Gummifüsse |
+| `Buzzerpult_SD-Klappe.stl` | Drehklappe für die SD-Öffnung im Boden, mit Schnappzapfen und Rastkragen; flach gedruckt, Zapfen nach oben |
 | `Buzzerpult_Lochtest.stl` | Testplatte mit Löchern 23,8/24,0/24,3/24,6/25,0 mm, um die Zugabe für die 24-mm-Bohrung zu prüfen |
 
 ## Wichtigste Parameter (`buzzerpult.scad`)
@@ -23,6 +24,10 @@
 | `next_on` | true | Weiter-Button (weiss, 44 mm) ein- oder ausschalten |
 | `btn_left` | 45 | Mitte des roten Buttons ab linker Aussenkante; die Farbreihe hängt nicht mehr von `W` ab |
 | `next_x`, `next_y` | 254, 34 | Weiter-Button rechts neben Grün, 21 mm zum Benutzer hin versetzt; Kappenlücke 10,7 mm |
+| `sd_access` | true | Öffnung im Boden unter der SD-Karte (24 × 26 mm) mit Drehklappe |
+| `sd_pivot` | 100, 92 | Drehpunkt der Klappe; innen frei zwischen Pi-Auflage, Haken und ULN2003 |
+| `door_t`, `door_plug` | 1.6, 0.8 | Stärke der Klappe; Höhe des Rastkragens, der in die Öffnung einrastet |
+| `door_pin_d` | 5.6 | Zapfen der Klappe (Loch im Boden 6,0 mm) |
 | `uln_box` | – | Platz für die ULN2003-Platine; nur für die Kollisionsprüfung |
 | `pi_model` | 3 | 3 = Raspberry Pi 3 B/B+ (Micro-USB + HDMI), 4 = Raspberry Pi 4 (USB-C + 2 × Micro-HDMI). Steuert das Fenster in der Rückwand. |
 | `pi_so` | 8 | Höhe der Pi-Auflagen; bestimmt auch die Federlänge der Haken |
@@ -40,6 +45,7 @@ Geometrie-Annahmen: Unter den Buttons bleibt ein Freiraum von Ø 40 mm × 52,5 m
 openscad -o out/shell.stl -D 'part="shell"' buzzerpult.scad
 openscad -o out/base.stl  -D 'part="base"'  buzzerpult.scad
 openscad -o out/test.stl  -D 'part="test"'  buzzerpult.scad
+openscad -o out/door.stl  -D 'part="door"'  buzzerpult.scad
 openscad -o out/assembly.png --imgsize=1400,1000 --viewall --autocenter -D 'part="assembly"' buzzerpult.scad
 ```
 

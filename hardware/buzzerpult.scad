@@ -77,6 +77,17 @@ pi_audio_u = 53.5;
 win_u      = pi_model == 3 ? [3.5, 44.0] : [3.7, 47.0];   // Bereich in u
 win_z      = pi_model == 3 ? [-4.0, 14.0] : [-3.5, 10.5]; // Unterkante relativ zur Platinenoberseite, Höhe
 
+// ---------- Zugang zur SD-Karte ----------
+// Öffnung im Boden unter der SD-Karte, verschlossen mit einer Drehklappe. Die Klappe sitzt
+// mit einem Schnappzapfen im Boden und lässt sich ohne Werkzeug zur Seite schwenken.
+sd_access  = true;
+sd_hole    = [[pix(0) - 6.5, piy(42)], [24, 26]];   // [Ecke x,y], [Grösse]: x 84–108, y 104–130
+sd_pivot   = [100, 92];   // Drehpunkt der Klappe (innen frei zwischen Pi-Auflage, Haken und ULN2003)
+door_t     = 1.6;         // Stärke der Klappe (steht so weit unter dem Boden vor)
+door_m     = 3;           // Überdeckung rund um die Öffnung
+door_pin_d = 5.6;  door_pin_hole = 6.0;
+door_plug  = 0.8;         // Rastkragen: rastet in die Öffnung ein, hält die Klappe geschlossen
+
 // ---------- Verschraubung ----------
 boss_d     = 9;
 boss_pilot = 2.6;    // für M3-Kunststoffschrauben (z. B. 3×12) – für Gewindeeinsätze M3: 4.0
@@ -242,6 +253,11 @@ module base() {
       cylinder(d = 3.4, h = bt + 1);
       cylinder(d1 = 6.6, d2 = 3.4, h = 1.8);
     }
+    // Öffnung zur SD-Karte und Loch für den Zapfen der Klappe
+    if (sd_access) {
+      translate([sd_hole[0][0], sd_hole[0][1], -1]) linear_extrude(bt + 2) rrect(sd_hole[1][0], sd_hole[1][1], 3);
+      translate([sd_pivot[0], sd_pivot[1], -1]) cylinder(d = door_pin_hole, h = bt + 2);
+    }
     // Lüftungsschlitze unter dem Pi
     for (x = [pix(76) : 7 : pix(10)]) translate([x, piy(48), -1])
       linear_extrude(bt + 2) rotate(90) rslot(piy(8) - piy(48), 3.2);
@@ -251,6 +267,42 @@ module base() {
     // Beschriftung unten
     translate([W - 12, 40, 0.6]) rotate([0, 180, 0]) linear_extrude(1)
       text("Stimmungsbarometer", size = 6, halign = "left", font = "Liberation Sans:style=Bold");
+  }
+}
+
+// ------------------------------- Klappe -----------------------------------
+// Lage wie eingebaut, aber gespiegelt gedacht: z = 0 ist die Aussenseite (liegt beim Drucken
+// auf dem Bett), der Zapfen zeigt nach oben in den Boden.
+module door_outline() {
+  hull() {
+    translate(sd_pivot) circle(d = 14);
+    translate([sd_hole[0][0] - door_m, sd_hole[0][1] - door_m])
+      rrect(sd_hole[1][0] + 2*door_m, sd_hole[1][1] + 2*door_m, 4);
+  }
+}
+module door() {
+  c = 0.3;   // Luft zur Öffnung
+  difference() {
+    union() {
+      linear_extrude(door_t) door_outline();
+      // Rastkragen mit Fase: drückt die Klappe beim Schwenken 0,8 mm vom Boden weg und rastet ein
+      hull() {
+        translate([sd_hole[0][0] + c, sd_hole[0][1] + c, door_t - 0.01])
+          linear_extrude(0.01) rrect(sd_hole[1][0] - 2*c, sd_hole[1][1] - 2*c, 3);
+        translate([sd_hole[0][0] + c + door_plug, sd_hole[0][1] + c + door_plug, door_t + door_plug - 0.01])
+          linear_extrude(0.01) rrect(sd_hole[1][0] - 2*c - 2*door_plug, sd_hole[1][1] - 2*c - 2*door_plug, 2);
+      }
+      // Schnappzapfen: Schaft durch den Boden, Kopf rastet auf der Innenseite
+      translate([sd_pivot[0], sd_pivot[1], door_t - 0.01]) {
+        cylinder(d = door_pin_d, h = bt + 0.3);
+        translate([0, 0, bt + 0.3]) cylinder(d1 = door_pin_hole + 0.9, d2 = door_pin_d - 1.4, h = 2.0);
+      }
+    }
+    // Schlitz, damit der Kopf beim Einstecken federt
+    translate([sd_pivot[0] - 0.8, sd_pivot[1] - 5, door_t + 0.6]) cube([1.6, 10, bt + 3]);
+    // Griffmulden an der freien Ecke (zum Aufschwenken mit dem Daumen)
+    for (i = [0:3]) translate([sd_hole[0][0] - door_m + 3 + i*2.2, sd_hole[0][1] + sd_hole[1][1] + door_m - 9, -0.01])
+      cube([1.0, 7, 0.5]);
   }
 }
 
@@ -299,6 +351,7 @@ module assembly() {
     color("dimgray") translate([0, 0, -tt - next_below]) cylinder(d = 26, h = next_below);
   }
   %translate(uln_box[0]) cube(uln_box[1]);
+  if (sd_access) color("orange") translate([0, 0, -door_t]) door();
 }
 
 // ------------------------------- Ausgabe ----------------------------------
@@ -306,4 +359,5 @@ if (part == "shell") {
   if (print_orient) rotate([180 - a, 0, 0]) translate([0, 0, 0]) shell(); else shell();
 } else if (part == "base") base();
 else if (part == "test") hole_test();
+else if (part == "door") door();
 else if (part=="assembly") assembly();
